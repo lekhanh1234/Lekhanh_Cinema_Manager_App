@@ -8,6 +8,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.cinemamanagerapp.R
 
 class MainActivity : AppCompatActivity() {
+
+    //Cap Nhat 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
