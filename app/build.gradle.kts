@@ -55,5 +55,5 @@ dependencies {
     implementation("com.github.ismaeldivita:chip-navigation-bar:1.4.0")
 
 // BlurView - thư viện tạo hiệu ứng mờ cho các view
-    implementation("com.github.Dimezis:BlurView:2.0.5")
+    implementation ("com.github.Dimezis:BlurView:version-2.0.5")
 }
