@@ -21,8 +21,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -32,6 +31,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -45,4 +47,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+// Glide - thư viện tải và hiển thị hình ảnh
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+// Chip Navigation Bar - thư viện tạo thanh điều hướng với chip
+    implementation("com.github.ismaeldivita:chip-navigation-bar:1.4.0")
+
+// BlurView - thư viện tạo hiệu ứng mờ cho các view
+    implementation("com.github.Dimezis:BlurView:2.0.5")
 }

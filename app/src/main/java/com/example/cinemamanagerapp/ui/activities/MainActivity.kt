@@ -10,6 +10,7 @@ import com.example.cinemamanagerapp.R
 class MainActivity : AppCompatActivity() {
 
     //Cap Nhat 1
+    //Cap Nhat 2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
