@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Tiêu đề chính của ứng dụng -->
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.05"
+                android:padding="10dp"
+                android:text="CINEMA MANAGER APP"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#3E4EB8"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <!-- Hình ảnh logo -->
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/intro_logo" />
+
+            <!-- Phần mô tả ứng dụng -->
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.04"
+                android:lineSpacingExtra="6dp"
+                android:text="Khám phá và đặt vé\ncho những bộ phim mới nhất\ntại rạp chiếu phim yêu thích của bạn.\nDễ dàng và nhanh chóng!"
+                android:textAlignment="center"
+                android:textColor="#2C2C2C"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Nút bắt đầu với màu sắc nổi bật -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/startBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/rounded_button_bg"
+        android:fontFamily="sans-serif-medium"
+        android:padding="16dp"
+        android:text="BẮT ĐẦU"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+</LinearLayout>
