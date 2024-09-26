@@ -15,3 +15,6 @@ Các tính năng chính của Cinema Manager App:
 - User có thể thực hiện thanh toán theo 2 phương thức: Ví điện tử, Ngân Hàng
 - User có thể xem lại lịch sử đặt vé của mình (Booking History), có tính năng QR Code để giúp admin check vé khi tới rạp chiếu phim
 - User sẽ được xem trước một phần của bộ phim hiện tại đang chiếu tại rạp (Trailer)
+
+Tính năng trong tương lai:
+Thay đổi giữa Vi/En
