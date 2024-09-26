@@ -1,12 +1,10 @@
-
-
-
 Các tính năng chính của Cinema Manager App:
-- Có module quản lý tài khoản theo 2 role riêng biệt là Admin (quản trị) và người dùng (user) bao gồm các tính năng: đăng nhập, đăng ký, quên mật khẩu, đổi mật khẩu, hiển thị user profile, đăng xuất.
-- Admin có thể thêm, sửa, xóa, hiển thị danh sách thể loại phim (Category). Tìm kiếm Category theo keyword.
-- Admin có thể thêm, sửa, xóa, hiển thị danh sách đồ ăn/đồ uống (Food/Drink). Tìm kiếm Food/Drink theo keyword.
-- Admin có thể thêm, sửa, xóa, hiển thị danh sách các bộ phim (Movie). Tìm kiếm Movie theo keyword hoặc theo thể loại phim (Category).
-- Admin có thể xem lịch sử đặt vé của tất cả người dùng (Booking History). Có thể tìm kiếm Booking History theo ID hoặc là scan QR Code.
+
+- Có module quản lý tài khoản theo 2 role riêng biệt là Admin (quản trị) và người dùng (user) bao gồm các tính năng: đăng nhập, đăng ký, quên mật khẩu, đổi mật khẩu, hiển thị user profile, đăng xuất
+- Admin có thể thêm, sửa, xóa, hiển thị danh sách thể loại phim (Category). Tìm kiếm Category theo keyword
+- Admin có thể thêm, sửa, xóa, hiển thị danh sách đồ ăn/đồ uống (Food/Drink). Tìm kiếm Food/Drink theo keyword
+- Admin có thể thêm, sửa, xóa, hiển thị danh sách các bộ phim (Movie). Tìm kiếm Movie theo keyword hoặc theo thể loại phim (Category)
+- Admin có thể xem lịch sử đặt vé của tất cả người dùng (Booking History). Có thể tìm kiếm Booking History theo ID hoặc là scan QR Code
 - Admin có thể quản lý doanh thu của rạp phim được thống kê theo từng bộ phim tương ứng
 
 - User có thể xem danh sách thể loại phim (Category), danh sách tất cả các bộ phim (Movie) chiếu trong rạp ngoài màn hình Home
