@@ -11,9 +11,9 @@ Các tính năng chính của Cinema Manager App:
 
 - User có thể xem danh sách thể loại phim (Category), danh sách tất cả các bộ phim (Movie) chiếu trong rạp ngoài màn hình Home
 - User có thể tìm kiếm phim theo keyword hoặc theo từng thể loại (Category)
-- User có thể xem danh sách các bộ phim tưng ứng với từng thể loại (Category) riêng biệt
+- User có thể xem danh sách các bộ phim tương ứng với từng thể loại (Category) riêng biệt
 - User có thể xem chi tiết bộ phim: thông tin chi tiết, mô tả phim, video trailer
-- User có thể đặt vé xem phim: chọn phòng chiếu phim, giờ chiếu phim, chọn số lượng vé muốn đặt, vị trí ghế trong rạp tương ứng, đồ ăn/đồ uống (Food/Drink) đi kèm.
+- User có thể đặt vé xem phim: chọn phòng chiếu phim, giờ chiếu phim, chọn số lượng vé muốn đặt, vị trí ghế trong rạp tương ứng, đồ ăn/đồ uống (Food/Drink) đi kèm
 - User có thể thực hiện thanh toán theo 2 phương thức: Ví điện tử, Ngân Hàng
-- User có thể xem lại lịch sử đặt vé của mình (Booking History), có tính năng tạo QR Code để giúp admin check vé khi tới rạp chiếu phim.
-- User sẽ được xem trước một bộ phim hiện tại đang chiếu tại rạp (Góp Ý Hiện tại)
+- User có thể xem lại lịch sử đặt vé của mình (Booking History), có tính năng QR Code để giúp admin check vé khi tới rạp chiếu phim
+- User sẽ được xem trước một phần của bộ phim hiện tại đang chiếu tại rạp (Trailer)
