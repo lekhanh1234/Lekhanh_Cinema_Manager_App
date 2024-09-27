@@ -2,8 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main_color">#252b45</color>
-    <color name="black2">#28292b</color>
-    <color name="orange">#d14706</color>
-    <color name="grey">#989797</color>
+    <color name="orange_bold">#D17842</color>
+    <color name="green_chaleston">#252A32</color>
+    <color name="red_exp">#ED1C24</color>
+    <color name="blue_bld">#009EDB</color>
+    <color name="yellow_erth">#FFC107</color>
+    <color name="green_ext">#32B34A</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="light_pink">#F4EEEE</color>
 </resources>

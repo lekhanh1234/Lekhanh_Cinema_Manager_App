@@ -1,20 +1,26 @@
 package com.example.cinemamanagerapp.ui.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
+import com.example.cinemamanagerapp.databinding.ActivityMainBinding
+import com.example.cinemamanagerapp.ui.fragment.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var loginButton: Button
-    private lateinit var welcomeTextView: TextView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main) // Đảm bảo tạo layout này
 
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Hiển thị fragment mặc định
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.nav_host_fragment_activiy, HomeFragment())
+                .commit()
+        }
     }
 }
