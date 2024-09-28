@@ -11,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
 import com.example.cinemamanagerapp.api.LoginRequest
 import com.example.cinemamanagerapp.api.RetrofitClient
+import com.example.cinemamanagerapp.api.UserDetails
 import com.example.cinemamanagerapp.models.LoginResponse
 import com.example.cinemamanagerapp.ui.activities.MainActivity
 import com.example.cinemamanagerapp.ui.activities.RegisterActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Date
 
 class LoginActivity : AppCompatActivity() {
 
@@ -60,6 +62,7 @@ class LoginActivity : AppCompatActivity() {
                 val loginResponse = response.body()
                 val token = loginResponse?.token
                 saveToken(token)
+                saveUserInfo(loginResponse?.user)
                 Toast.makeText(this@LoginActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                 finish()
@@ -68,6 +71,16 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, "Đăng nhập thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun saveUserInfo(user: UserDetails?) {
+        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("username", user?.username)
+        editor.putString("email", user?.email)
+        editor.putString("role", user?.role)
+        editor.putString("last_login", Date().toString()) // Có thể thay đổi nếu cần
+        editor.apply()
     }
 
     private fun saveToken(token: String?) {

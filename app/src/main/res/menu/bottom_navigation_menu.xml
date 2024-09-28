@@ -4,19 +4,26 @@
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/home_nav"
-        android:title="Home" />
+        android:title="Trang chủ" />
+
+    <item
+        android:id="@+id/nav_store"
+        android:icon="@drawable/store"
+        android:title="Cửa hàng" />
+
     <item
         android:id="@+id/nav_history"
         android:icon="@drawable/fourbox"
-        android:title="History" />
+        android:title="Lịch sử" />
 
     <item
         android:id="@+id/nav_fav"
         android:icon="@drawable/heart_nav"
-        android:title="Favorite" />
+        android:title="Yêu thích" />
+
     <item
         android:id="@+id/nav_settting"
         android:icon="@drawable/user_circle_filled"
-        android:title="Settings" />
+        android:title="Cài đặt" />
 
 </menu>

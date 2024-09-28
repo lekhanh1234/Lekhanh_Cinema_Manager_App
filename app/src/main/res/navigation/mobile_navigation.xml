@@ -11,4 +11,11 @@
         android:label="Home"
         tools:layout="@layout/fragment_home_fragment" />
 
+    <fragment
+        android:id="@+id/nav_store"
+        android:name="com.example.cinemamanagerapp.ui.fragment.StoreFragment"
+        android:label="Store"
+        tools:layout="@layout/fragment_store" />
+
+    -->
 </navigation>
