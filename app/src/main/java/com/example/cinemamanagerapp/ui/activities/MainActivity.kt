@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cinemamanagerapp.R
 import com.example.cinemamanagerapp.databinding.ActivityMainBinding
+import com.example.cinemamanagerapp.ui.fragment.FavoriteFragment
 import com.example.cinemamanagerapp.ui.fragment.HomeFragment
+import com.example.cinemamanagerapp.ui.fragment.OrderHistoryFragment
+import com.example.cinemamanagerapp.ui.fragment.SettingFragment
 import com.example.cinemamanagerapp.ui.fragment.StoreFragment
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +35,18 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_store -> {
                     replaceFragment(StoreFragment())
+                    true
+                }
+                R.id.nav_history -> {
+                    replaceFragment(OrderHistoryFragment())
+                    true
+                }
+                R.id.nav_fav -> {
+                    replaceFragment(FavoriteFragment())
+                    true
+                }
+                R.id.nav_settting -> {
+                    replaceFragment(SettingFragment())
                     true
                 }
                 else -> false

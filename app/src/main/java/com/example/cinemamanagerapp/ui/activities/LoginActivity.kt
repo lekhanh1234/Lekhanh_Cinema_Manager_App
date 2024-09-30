@@ -29,19 +29,32 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login) // Đảm bảo layout này tồn tại
+        setContentView(R.layout.activity_login)
 
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         loginButton = findViewById(R.id.loginButton)
         registerTextView = findViewById(R.id.registerTextView)
 
+        // Kiểm tra xem người dùng đã đăng nhập hay chưa
+        checkIfLoggedIn()
+
         loginButton.setOnClickListener {
             loginUser()
         }
 
         registerTextView.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java)) // Chuyển đến RegisterActivity
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+    }
+
+    private fun checkIfLoggedIn() {
+        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val token = sharedPreferences.getString("user_token", null)
+        if (token != null) {
+            // Nếu đã đăng nhập, chuyển sang MainActivity
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 
@@ -56,19 +69,22 @@ class LoginActivity : AppCompatActivity() {
 
         val loginRequest = LoginRequest(email = email, password = password)
 
-        // Sử dụng phương thức mở rộng đã định nghĩa trước đó
         RetrofitClient.apiService.loginUser(loginRequest).enqueue { response ->
             if (response.isSuccessful) {
                 val loginResponse = response.body()
-                val token = loginResponse?.token
-                saveToken(token)
-                saveUserInfo(loginResponse?.user)
-                Toast.makeText(this@LoginActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                finish()
+                loginResponse?.let {
+                    val token = it.token
+                    saveToken(token)
+                    saveUserInfo(it.user)
+                    Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                } ?: run {
+                    Toast.makeText(this, "Đăng nhập thất bại: Không có dữ liệu trả về", Toast.LENGTH_SHORT).show()
+                }
             } else {
                 val errorMessage = response.errorBody()?.string() ?: response.message()
-                Toast.makeText(this@LoginActivity, "Đăng nhập thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Đăng nhập thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -79,7 +95,9 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("username", user?.username)
         editor.putString("email", user?.email)
         editor.putString("role", user?.role)
-        editor.putString("last_login", Date().toString()) // Có thể thay đổi nếu cần
+        editor.putString("phone_number", user?.profile_info?.phone_number)
+        editor.putString("gender", user?.profile_info?.gender)
+        editor.putString("last_login", Date().toString())
         editor.apply()
     }
 
@@ -89,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("user_token", token)
         editor.apply()
     }
+
     fun <T> Call<T>.enqueue(callback: (Response<T>) -> Unit) {
         this.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -96,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                t.printStackTrace() // Xử lý lỗi ở đây nếu cần
+                t.printStackTrace()
             }
         })
     }

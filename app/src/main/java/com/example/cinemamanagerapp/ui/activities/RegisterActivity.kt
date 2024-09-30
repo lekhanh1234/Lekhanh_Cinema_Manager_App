@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
+import com.example.cinemamanagerapp.api.ApiUser
 import com.example.cinemamanagerapp.api.RetrofitClient
 import com.example.cinemamanagerapp.models.User
 import retrofit2.Call
@@ -33,7 +34,6 @@ class RegisterActivity : AppCompatActivity() {
             registerUser()
         }
     }
-
     private fun registerUser() {
         val username = usernameEditText.text.toString().trim()
         val email = emailEditText.text.toString().trim()
@@ -44,7 +44,11 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        val user = User(username = username, email = email, password = password)
+        val user = ApiUser(
+            username = username,
+            email = email,
+            password = password // Thêm password vào ApiUser
+        )
 
         RetrofitClient.apiService.registerUser(user).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -63,6 +67,6 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this@RegisterActivity, "Lỗi kết nối: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
-
     }
+
 }
