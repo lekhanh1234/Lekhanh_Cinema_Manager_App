@@ -1,13 +1,11 @@
 package com.example.cinemamanagerapp.api
 
+import com.example.cinemamanagerapp.models.ProfileInfo
 import com.example.cinemamanagerapp.models.User
-import com.squareup.okhttp.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.PUT
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 // Định nghĩa lớp Request cho API đăng nhập
 data class LoginRequest(
@@ -15,36 +13,40 @@ data class LoginRequest(
     val password: String
 )
 
-// Định nghĩa lớp ProfileInfo
-data class ProfileInfo(
-    val address: String? = null,
-    val phone_number: String? = null,
-    val gender: String? = null,
-    val favorite_movies: List<String>? = null // Có thể lưu ID phim dưới dạng chuỗi
+data class UserIdRequest(val email: String)
+
+data class PasswordRequest(
+    val email: String,
+    val oldPassword: String,
+    val newPassword: String
 )
 
-// Định nghĩa lớp ApiUser cho đăng ký và cập nhật
 data class ApiUser(
+    val userId: String,
     val username: String,
     val email: String,
-    val password: String? = null, // Có thể bỏ qua nếu không thay đổi mật khẩu
-    val role: String? = null,
-    val profile_info: ProfileInfo? = null // Đảm bảo đây là ProfileInfo từ api
+    val password: String, // Thêm trường password
+    val address: String? = null,
+    val phone_number: String? = null,
+    val gender: String? = null
 )
+
 
 interface ApiService {
     @POST("auth/login")
     fun loginUser(@Body user: LoginRequest): Call<LoginResponse>
 
-    // Đăng ký người dùng mới
     @POST("auth/register")
     fun registerUser(@Body user: ApiUser): Call<Void>
 
-    @GET("user/profile")
-    fun getProfile(): Call<User>
+    @POST("auth/get-profile")
+    fun getProfile(@Body userIdRequest: UserIdRequest): Call<UserDetails>
 
-    @PUT("user/profile")
-    fun updateProfile(@Header("Authorization") token: String, @Body user: ApiUser): Call<ResponseBody>
+    @PUT("auth/update-profile")
+    fun updateProfile(@Body user: ApiUser): Call<Void>
+
+    @PUT("auth/update-password")
+    fun updatePassword(@Body passwordRequest: PasswordRequest): Call<Void>
 }
 
 // Data class cho phản hồi đăng nhập
@@ -54,9 +56,11 @@ data class LoginResponse(
 )
 
 data class UserDetails(
-    val user_id: String,
+    val id: String,
     val username: String,
     val email: String,
-    val role: String,
-    val profile_info: ProfileInfo // Thêm profile_info vào UserDetails
+    val role: String, // Đảm bảo thuộc tính này có trong UserDetails
+    val address: String? = null,
+    val phone_number: String? = null,
+    val gender: String? = null
 )

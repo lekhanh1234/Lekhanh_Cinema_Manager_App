@@ -1,5 +1,6 @@
 package com.example.cinemamanagerapp.ui.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -9,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
 import com.example.cinemamanagerapp.api.ApiUser
 import com.example.cinemamanagerapp.api.RetrofitClient
-import com.example.cinemamanagerapp.models.User
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +23,7 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register) // Đảm bảo tạo layout này
+        setContentView(R.layout.activity_register)
 
         usernameEditText = findViewById(R.id.usernameEditText)
         emailEditText = findViewById(R.id.emailEditText)
@@ -34,28 +34,35 @@ class RegisterActivity : AppCompatActivity() {
             registerUser()
         }
     }
+
     private fun registerUser() {
         val username = usernameEditText.text.toString().trim()
         val email = emailEditText.text.toString().trim()
         val password = passwordEditText.text.toString().trim()
 
+        // Kiểm tra thông tin đầu vào
         if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập thông tin", Toast.LENGTH_SHORT).show()
             return
         }
 
+        // Tạo đối tượng ApiUser
         val user = ApiUser(
+            userId = email, // Sử dụng email làm userId
             username = username,
             email = email,
-            password = password // Thêm password vào ApiUser
+            password = password, // Đưa password vào đối tượng người dùng
+            address = null, // Có thể thay đổi nếu cần
+            phone_number = null, // Có thể thay đổi nếu cần
+            gender = "Not Specified" // Hoặc có thể điều chỉnh nếu bạn muốn
         )
 
+        // Gọi API để đăng ký người dùng
         RetrofitClient.apiService.registerUser(user).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@RegisterActivity, "Đăng ký thành công!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
                     finish()
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Đăng ký thất bại"
@@ -68,5 +75,4 @@ class RegisterActivity : AppCompatActivity() {
             }
         })
     }
-
 }

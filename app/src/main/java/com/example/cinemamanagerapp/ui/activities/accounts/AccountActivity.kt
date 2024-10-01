@@ -4,116 +4,142 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.RadioButton
+import android.widget.EditText
+import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
 import com.example.cinemamanagerapp.api.ApiService
 import com.example.cinemamanagerapp.api.RetrofitClient
-import com.example.cinemamanagerapp.api.ProfileInfo
 import com.example.cinemamanagerapp.api.ApiUser
-import com.example.cinemamanagerapp.models.User
-import com.google.android.material.textfield.TextInputEditText
-import com.squareup.okhttp.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class AccountActivity : AppCompatActivity() {
 
-    private lateinit var apiService: ApiService
-    private lateinit var user: User
+    private lateinit var btnSave: Button
+    private lateinit var tedEmail: EditText
+    private lateinit var tedName: EditText
+    private lateinit var tedPhone: EditText
+    private lateinit var rdoGroupGender: RadioGroup
+
+    private val apiService: ApiService by lazy { RetrofitClient.apiService }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
-        apiService = RetrofitClient.apiService
+        initViews()
+        getUserInfo()
 
-        // Lấy thông tin từ SharedPreferences
-        loadUserData()
-
-        // Thiết lập sự kiện cho nút Save
-        findViewById<Button>(R.id.btnSaveAccount).setOnClickListener {
-            updateUserProfile()
+        btnSave.setOnClickListener {
+            updateProfile()
         }
     }
 
-    private fun loadUserData() {
+    private fun initViews() {
+        btnSave = findViewById(R.id.btnSaveAccount)
+        tedEmail = findViewById(R.id.tedEmailAccount)
+        tedName = findViewById(R.id.tedNameAccount)
+        tedPhone = findViewById(R.id.tedPhoneAccount)
+        rdoGroupGender = findViewById(R.id.rdoGroupGender)
+    }
+
+    private fun getUserInfo() {
         val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val username = sharedPreferences.getString("username", "")
-        val email = sharedPreferences.getString("email", "")
-        val phoneNumber = sharedPreferences.getString("phone_number", "")
-        val gender = sharedPreferences.getString("gender", "")
+        val username = sharedPreferences.getString("username", null)
+        val email = sharedPreferences.getString("email", null)
+        val phone = sharedPreferences.getString("phone_number", null)
+        val gender = sharedPreferences.getString("gender", "Other")
 
-        // Điền dữ liệu vào các trường
-        findViewById<TextInputEditText>(R.id.tedEmailAccount).setText(email)
-        findViewById<TextInputEditText>(R.id.tedNameAccount).setText(username)
-        findViewById<TextInputEditText>(R.id.tedPhoneAccount).setText(phoneNumber)
+        tedName.setText(username)
+        tedEmail.setText(email)
+        tedPhone.setText(phone)
 
-        // Thiết lập giới tính
+        setGenderRadio(gender)
+    }
+
+    private fun setGenderRadio(gender: String?) {
         when (gender) {
-            "Male" -> findViewById<RadioButton>(R.id.rdoMale).isChecked = true
-            "Female" -> findViewById<RadioButton>(R.id.rdoFemale).isChecked = true
-            else -> findViewById<RadioButton>(R.id.rdoOther).isChecked =
-                true // Giả định bạn có RadioButton cho "Other"
+            "Male" -> rdoGroupGender.check(R.id.rdoMale)
+            "Female" -> rdoGroupGender.check(R.id.rdoFemale)
+            "Other" -> rdoGroupGender.check(R.id.rdoOther)
+            else -> rdoGroupGender.clearCheck()
         }
     }
 
-    private fun updateUserProfile() {
-        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val token = sharedPreferences.getString("user_token", null)
+    private fun updateProfile() {
+        val email = tedEmail.text.toString().trim()
+        val name = tedName.text.toString().trim()
+        val phone = tedPhone.text.toString().trim().ifEmpty { null }
+        val address = "" // Nếu cần thêm trường địa chỉ
+        val gender = when (rdoGroupGender.checkedRadioButtonId) {
+            R.id.rdoMale -> "Male"
+            R.id.rdoFemale -> "Female"
+            R.id.rdoOther -> "Other"
+            else -> null // Gán null nếu không có lựa chọn
+        }
 
-        if (token.isNullOrEmpty()) {
-            Toast.makeText(this, "Token không hợp lệ", Toast.LENGTH_SHORT).show()
+        // Kiểm tra các trường dữ liệu
+        val validationMessage = validateInputs(email, name, phone, gender)
+        if (validationMessage != null) {
+            Toast.makeText(this, validationMessage, Toast.LENGTH_SHORT).show()
             return
         }
 
-        val authToken = "Bearer $token"
-        val username = sharedPreferences.getString("username", "") ?: ""
-        val email = sharedPreferences.getString("email", "") ?: ""
-        val phoneNumber = findViewById<TextInputEditText>(R.id.tedPhoneAccount).text.toString()
-        val gender = when {
-            findViewById<RadioButton>(R.id.rdoMale).isChecked -> "Male"
-            findViewById<RadioButton>(R.id.rdoFemale).isChecked -> "Female"
-            else -> "Other"
-        }
-
-        val updatedUser = ApiUser(
-            username = username,
+        val user = ApiUser(
+            userId = email,
+            username = name,
             email = email,
-            profile_info = ProfileInfo(
-                phone_number = phoneNumber,
-                gender = gender
-            )
+            password = "", // Bạn có thể thêm logic để lấy mật khẩu nếu cần
+            phone_number = phone,
+            address = address.takeIf { it.isNotEmpty() }, // Chỉ thêm địa chỉ nếu có giá trị
+            gender = gender
         )
 
-        apiService.updateProfile(authToken, updatedUser).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+        apiService.updateProfile(user).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@AccountActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AccountActivity, "Cập nhật thông tin thành công", Toast.LENGTH_SHORT).show()
+                    saveUserInfo(user)
                 } else {
-                    // Improved error handling
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("AccountActivity", "Update failed: ${response.code()} - $errorBody")
-                    val errorMessage = extractErrorMessage(errorBody)
-                    Toast.makeText(this@AccountActivity, "Cập nhật thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AccountActivity, "Cập nhật thất bại: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e("AccountActivity", "Failed to update user profile", t)
-                Toast.makeText(this@AccountActivity, "Có lỗi xảy ra, vui lòng thử lại", Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(this@AccountActivity, "Lỗi: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun extractErrorMessage(errorBody: String?): String {
-        // Enhanced error message extraction
-        return errorBody?.let {
-            val pattern = "<pre>(.*?)</pre>".toRegex()
-            pattern.find(it)?.groupValues?.get(1) ?: "Failed to update profile. Please try again later."
-        } ?: "An unknown error occurred."
+    // Hàm kiểm tra đầu vào
+    private fun validateInputs(email: String, name: String, phone: String?, gender: String?): String? {
+        if (email.isEmpty()) {
+            return "Email không được để trống"
+        }
+        if (name.isEmpty()) {
+            return "Tên không được để trống"
+        }
+        if (phone.isNullOrEmpty()) {
+            return "Số điện thoại không được để trống"
+        }
+        if (gender == null) {
+            return "Vui lòng chọn giới tính"
+        }
+        return null // Nếu không có lỗi nào
     }
 
+    private fun saveUserInfo(user: ApiUser) {
+        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("username", user.username)
+        editor.putString("email", user.email)
+        editor.putString("phone_number", user.phone_number)
+        editor.putString("gender", user.gender ?: "Other")
+        editor.apply()
+
+        Log.d("AccountActivity", "Thông tin người dùng đã được lưu: ${user.username}, Số điện thoại: ${user.phone_number}, Giới tính: ${user.gender}")
+    }
 }

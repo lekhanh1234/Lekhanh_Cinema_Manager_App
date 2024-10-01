@@ -3,6 +3,7 @@ package com.example.cinemamanagerapp.ui.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -10,9 +11,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
 import com.example.cinemamanagerapp.api.LoginRequest
+import com.example.cinemamanagerapp.api.LoginResponse
 import com.example.cinemamanagerapp.api.RetrofitClient
 import com.example.cinemamanagerapp.api.UserDetails
-import com.example.cinemamanagerapp.models.LoginResponse
 import com.example.cinemamanagerapp.ui.activities.MainActivity
 import com.example.cinemamanagerapp.ui.activities.RegisterActivity
 import retrofit2.Call
@@ -39,9 +40,7 @@ class LoginActivity : AppCompatActivity() {
         // Kiểm tra xem người dùng đã đăng nhập hay chưa
         checkIfLoggedIn()
 
-        loginButton.setOnClickListener {
-            loginUser()
-        }
+        loginButton.setOnClickListener { loginUser() }
 
         registerTextView.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
@@ -69,24 +68,31 @@ class LoginActivity : AppCompatActivity() {
 
         val loginRequest = LoginRequest(email = email, password = password)
 
-        RetrofitClient.apiService.loginUser(loginRequest).enqueue { response ->
-            if (response.isSuccessful) {
-                val loginResponse = response.body()
-                loginResponse?.let {
-                    val token = it.token
-                    saveToken(token)
-                    saveUserInfo(it.user)
-                    Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                } ?: run {
-                    Toast.makeText(this, "Đăng nhập thất bại: Không có dữ liệu trả về", Toast.LENGTH_SHORT).show()
+        RetrofitClient.apiService.loginUser(loginRequest).enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful) {
+                    val loginResponse = response.body()
+                    loginResponse?.let {
+                        val token = it.token
+                        saveToken(token)
+                        saveUserInfo(it.user)
+                        Toast.makeText(this@LoginActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                        finish()
+                    } ?: run {
+                        Toast.makeText(this@LoginActivity, "Đăng nhập thất bại: Không có dữ liệu trả về", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: response.message()
+                    Toast.makeText(this@LoginActivity, "Đăng nhập thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                val errorMessage = response.errorBody()?.string() ?: response.message()
-                Toast.makeText(this, "Đăng nhập thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
             }
-        }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                Log.e("LoginActivity", "Lỗi: ${t.message}", t)
+                Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun saveUserInfo(user: UserDetails?) {
@@ -95,10 +101,13 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("username", user?.username)
         editor.putString("email", user?.email)
         editor.putString("role", user?.role)
-        editor.putString("phone_number", user?.profile_info?.phone_number)
-        editor.putString("gender", user?.profile_info?.gender)
+        editor.putString("phone_number", user?.phone_number) // Cập nhật phone
+        editor.putString("gender", user?.gender) // Cập nhật gender
         editor.putString("last_login", Date().toString())
+        editor.putString("user_id", user?.id)
         editor.apply()
+
+        Log.d("LoginActivity", "User ID saved: ${user?.id}")
     }
 
     private fun saveToken(token: String?) {
@@ -106,17 +115,5 @@ class LoginActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         editor.putString("user_token", token)
         editor.apply()
-    }
-
-    fun <T> Call<T>.enqueue(callback: (Response<T>) -> Unit) {
-        this.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-                callback(response)
-            }
-
-            override fun onFailure(call: Call<T>, t: Throwable) {
-                t.printStackTrace()
-            }
-        })
     }
 }

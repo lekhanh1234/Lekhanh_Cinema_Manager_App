@@ -1,23 +1,10 @@
 package com.example.cinemamanagerapp.models
 
-import java.util.Date
-
-// ProfileInfo.kt
-data class ProfileInfo(
-    val address: String? = null,
-    val phoneNumber: String? = null, // Đổi tên trường thành phoneNumber
-    val gender: String? = null, // Thêm trường giới tính
-    val favoriteMovies: List<String>? = null // Có thể lưu ID phim dưới dạng chuỗi
-)
-
-// User.kt
-
 data class User(
-    val user_id: String,
-    val username: String,
-    val email: String,
-    val role: String,
-    val profile_info: ProfileInfo
+    val id: String, // ID của người dùng
+    val username: String, // Tên người dùng
+    val email: String, // Địa chỉ email
+    val role: String, // Vai trò của người dùng (ví dụ: admin, user)
+    val phone_number: String?, // Số điện thoại (có thể null)
+    val gender: String? // Giới tính (có thể null)
 )
-
-
