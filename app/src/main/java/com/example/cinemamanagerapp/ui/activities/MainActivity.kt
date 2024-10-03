@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cinemamanagerapp.R
+import com.example.cinemamanagerapp.api.UserProfile
 import com.example.cinemamanagerapp.databinding.ActivityMainBinding
 import com.example.cinemamanagerapp.ui.fragment.FavoriteFragment
 import com.example.cinemamanagerapp.ui.fragment.HomeFragment
@@ -15,9 +16,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    companion object {
+        var userId : Int = 0 //  0 là chưa được gán. vì userId trong database luon luon > 0
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        userId =  intent.getIntExtra("userId",-1)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

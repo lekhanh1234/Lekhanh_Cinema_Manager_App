@@ -8,7 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
-import com.example.cinemamanagerapp.api.ApiUser
+import com.example.cinemamanagerapp.api.RegisterInfo
 import com.example.cinemamanagerapp.api.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,24 +45,16 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "Vui lòng nhập thông tin", Toast.LENGTH_SHORT).show()
             return
         }
-
-        // Tạo đối tượng ApiUser
-        val user = ApiUser(
-            userId = email, // Sử dụng email làm userId
+        val user = RegisterInfo(
             username = username,
             email = email,
             password = password, // Đưa password vào đối tượng người dùng
-            address = null, // Có thể thay đổi nếu cần
-            phone_number = null, // Có thể thay đổi nếu cần
-            gender = "Not Specified" // Hoặc có thể điều chỉnh nếu bạn muốn
         )
-
         // Gọi API để đăng ký người dùng
         RetrofitClient.apiService.registerUser(user).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful) { // khi mã trả về từ 200 - 299, isSucessful = true
                     Toast.makeText(this@RegisterActivity, "Đăng ký thành công!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
                     finish()
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Đăng ký thất bại"
