@@ -98,4 +98,8 @@ dependencies {
 
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.2") // Kiểm tra phiên bản mới nhất
     implementation("androidx.navigation:navigation-ui-ktx:2.8.2") // Kiểm tra phiên bản mới nhất
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    
 }
