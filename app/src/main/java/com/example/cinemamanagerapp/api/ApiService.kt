@@ -1,7 +1,9 @@
 package com.example.cinemamanagerapp.api
 
+import com.example.cinemamanagerapp.models.FoodDrink
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
@@ -49,10 +51,13 @@ interface ApiService {
     // server dựa vào idUser trong database lấy thông tin gửi về
 
     @PUT("auth/update-profile")
-    fun updateProfile(@Body params: Map<String, Int>): Call<Void> // muốn update thanh phần gì thì
+    fun updateProfile(@Body user: ApiUser): Call<Void> // muốn update thanh phần gì thì
     // ghi vào trong map rồi up lên server . ví dụ userName và phoneNumber
     // val val params = mapOf( "userName" to newName, "phoneNumber" to 012345679) rồi gui len server
 
     @PUT("auth/update-password")
     fun updatePassword(@Body passwordRequest: PasswordUpdate): Call<Void>
+
+    @GET("api/food-drinks/")
+    fun getFoodDrinks(): Call<List<FoodDrink>>
 }
