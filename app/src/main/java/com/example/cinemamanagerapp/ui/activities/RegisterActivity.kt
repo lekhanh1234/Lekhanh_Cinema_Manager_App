@@ -8,8 +8,11 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cinemamanagerapp.R
-import com.example.cinemamanagerapp.api.RegisterInfo
+import com.example.cinemamanagerapp.api.RegisterRequest
+import com.example.cinemamanagerapp.api.RegisterResponse
 import com.example.cinemamanagerapp.api.RetrofitClient
+import com.example.cinemamanagerapp.ui.activities.UtilClass.saveUserInfo
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +22,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var usernameEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
+
     private lateinit var registerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,24 +49,32 @@ class RegisterActivity : AppCompatActivity() {
             Toast.makeText(this, "Vui lòng nhập thông tin", Toast.LENGTH_SHORT).show()
             return
         }
-        val user = RegisterInfo(
+        val user = RegisterRequest(
             username = username,
             email = email,
-            password = password, // Đưa password vào đối tượng người dùng
+            password = password,
         )
         // Gọi API để đăng ký người dùng
-        RetrofitClient.apiService.registerUser(user).enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) { // khi mã trả về từ 200 - 299, isSucessful = true
+        RetrofitClient.apiService.registerUser(user).enqueue(object : Callback<RegisterResponse> {
+            override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                if (response.code() == 201) { // khi mã trả về từ 200 - 299, isSucessful = true
+                    val registerResponse = response.body()
+                    saveUserInfo(this@RegisterActivity,email,password)
                     Toast.makeText(this@RegisterActivity, "Đăng ký thành công!", Toast.LENGTH_SHORT).show()
+                    var intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                    intent.putExtra("userId",registerResponse?.userId)
+                    intent.putExtra("userName",registerResponse?.userName)
+                    startActivity(intent)
                     finish()
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Đăng ký thất bại"
-                    Toast.makeText(this@RegisterActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                    val errorMessage = response.errorBody()?.string()
+                    val gson = Gson()
+                    val serverResponse = gson.fromJson(errorMessage, RegisterResponse::class.java)
+                    Toast.makeText(this@RegisterActivity, serverResponse.message, Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 Toast.makeText(this@RegisterActivity, "Lỗi kết nối: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

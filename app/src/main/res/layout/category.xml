@@ -7,7 +7,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="100dp"
         android:layout_height="35dp"
-        android:background="#202020"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         <TextView
@@ -16,6 +15,7 @@
             android:layout_height="match_parent"
             android:textSize="14dp"
             android:text="Trinh thám"
+            android:background="#202020"
             android:textColor="#FFFFFF"
             android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"

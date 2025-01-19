@@ -1,7 +1,7 @@
 package com.example.cinemamanagerapp.ui.adapters
 
+import android.content.Context
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +9,22 @@ import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cinemamanagerapp.R
+import com.example.cinemamanagerapp.ui.activities.ChooseChair
 
-class ADTChairNumber(private var mList: Array<Array<Boolean>>) : RecyclerView.Adapter<ADTChairNumber.ViewHold>() {
+class ADTChair(private var selectedList: List<Int>?,private var context: Context) : RecyclerView.Adapter<ADTChair.ViewHold>() {
+    private var currentlySelectedChair :  MutableSet<Int> =  mutableSetOf()
+    fun getCurrentlySelectedChair() :  MutableSet<Int>{
+        return currentlySelectedChair
+    }
     class ViewHold(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val img : ImageView;
+        init {
+            img = itemView.findViewById(R.id.Img_SeatCondition)
+        }
+    }
+    fun setNewSelectedSeList(selectedList: List<Int>?){
+        this.selectedList = selectedList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHold {
@@ -22,19 +35,29 @@ class ADTChairNumber(private var mList: Array<Array<Boolean>>) : RecyclerView.Ad
 
     override fun getItemCount(): Int {
         return 100;
-       // if (mList == null) 0 else mList.size
     }
 
     override fun onBindViewHolder(holder: ViewHold, position: Int) {
-        Log.d("position", ": "+position)
-        var img = holder.itemView.findViewById<ImageView>(R.id.Img_SeatCondition)
-        val y = position/10;
-        val x = position % 10;// vd 7 => 0/7 , 23 => 2/3, 20 => 2/0, 0 => 0/0
-//        if(mList[x][y] == false){
-//            img.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.context, R.color.red_exp))
-//        }
-        if(position % 2 == 0){
+        var img = holder.img
+        if(selectedList != null && selectedList!!.contains(position + 1)){
             img.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.context, R.color.red_exp))
         }
+        else{
+            img.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.context, R.color.white))
+        }
+        img.setOnClickListener({
+            if(selectedList == null || selectedList!!.contains(position+1) == false){
+                if(currentlySelectedChair.contains(position + 1)){
+                    img.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.context, R.color.white))
+                    currentlySelectedChair.remove(position + 1)
+                }else{
+                    img.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(holder.itemView.context, R.color.green_ext))
+                    currentlySelectedChair.add(position + 1)
+                }
+                var activity = context as ChooseChair
+                activity.getPaymentSumTV().text ="Tổng Thanh toán : " + (currentlySelectedChair.size * activity.getTicketPrice())+"đ"
+            }
+        })
+
     }
 }

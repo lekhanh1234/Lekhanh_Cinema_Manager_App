@@ -16,11 +16,13 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var userId : Int = 0 //  0 là chưa được gán. vì userId trong database luon luon > 0
-        var userName : String = ""
+        var userName : String = "Lê Thành Nhân"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userId =  intent.getIntExtra("userId",-1)
+       // userName = intent.getStringExtra("userName")!! // biến có thể null nên cần !! , ép về not null
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

@@ -22,9 +22,7 @@ class SettingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate layout cho fragment
         val view = inflater.inflate(R.layout.fragment_setting, container, false)
-        // Tìm LinearLayout và thiết lập OnClickListener
         val lnAccount: LinearLayout = view.findViewById(R.id.lnAccount)
         lnAccount.setOnClickListener {
             val intent = Intent(activity, AccountActivity::class.java)

@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/IMB_Sub"
+            android:id="@+id/img_Sub"
             android:layout_width="22dp"
             android:layout_height="6dp"
             android:layout_marginEnd="105dp"
@@ -58,7 +58,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/IMB_Add"
+            android:id="@+id/img_Add"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginEnd="20dp"

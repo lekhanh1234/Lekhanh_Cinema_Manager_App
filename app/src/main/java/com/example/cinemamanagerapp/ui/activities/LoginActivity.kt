@@ -13,6 +13,7 @@ import com.example.cinemamanagerapp.R
 import com.example.cinemamanagerapp.api.LoginRequest
 import com.example.cinemamanagerapp.api.LoginResponse
 import com.example.cinemamanagerapp.api.RetrofitClient
+import com.example.cinemamanagerapp.ui.activities.UtilClass.saveUserInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,17 +27,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkLoggedIn()
-        // khong dung ham checkIfloggedIn , vì có thể 1 user khác đã login trên 1 thiết bị khác và đổi mk
-        // khi đó mã không còn đúng
         setContentView(R.layout.activity_login)
         emailEditText = findViewById(R.id.emailEditText)
         passwordEditText = findViewById(R.id.passwordEditText)
         loginButton = findViewById(R.id.loginButton)
         registerTextView = findViewById(R.id.registerTextView)
-
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
-
-
 
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString().trim()
@@ -66,38 +61,26 @@ class LoginActivity : AppCompatActivity() {
         val loginRequest = LoginRequest(email = email, password = password)
         RetrofitClient.apiService.loginUser(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
-                    val loginResponse = response.body() //
+                if (response.code() == 200) {
+                    val loginResponse = response.body()
                     loginResponse?.let {
-                        saveUserInfo(email,password) // luu thong tin login
-                        // lưu email va password lại để lần sau dùng login
+                        saveUserInfo(this@LoginActivity,email,password)
                         Toast.makeText(this@LoginActivity, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show()
                         var intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        intent.putExtra("userId",loginResponse.userId)
+                        intent.putExtra("userId",loginResponse.id)
+                        intent.putExtra("userName",loginResponse.full_name)
                         startActivity(intent)
                         finish()
-                    } ?: run {
-                        Toast.makeText(this@LoginActivity, "Đăng nhập thất bại: Không có dữ liệu trả về", Toast.LENGTH_SHORT).show()
                     }
-                } else {
+                 } else {
                     val errorMessage = response.errorBody()?.string() ?: response.message()
                     Toast.makeText(this@LoginActivity, "Đăng nhập thất bại: $errorMessage", Toast.LENGTH_SHORT).show()
-                }
+                 }
             }
-
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Log.e("LoginActivity", "Lỗi: ${t.message}", t)
                 Toast.makeText(this@LoginActivity, "Đã xảy ra lỗi: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun saveUserInfo(email : String , password: String) {
-        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("email", email)
-        editor.putString("password", password)
-        editor.apply()
-        Log.d("LoginActivity", "User ID saved: ${email} --- ${password}")
     }
 }

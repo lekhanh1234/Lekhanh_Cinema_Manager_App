@@ -63,6 +63,10 @@ dependencies {
 
     // Thư viện ConstraintLayout
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+   // ExoPlayer
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+
 
     // ViewModel và LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
@@ -74,6 +78,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0") // Cập nhật phiên bản nếu cần
+
 
     // Thư viện Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")

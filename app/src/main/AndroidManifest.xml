@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -22,17 +21,15 @@
             android:name=".ui.activities.History"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.NowMovie"
-            android:exported="true"
-            android:theme="@style/Base.Theme.AppLight" />
+            android:name=".ui.activities.NowShowTime"
+            android:exported="true" />
         <activity
             android:name=".ui.activities.Payment"
-            android:exported="true"
-            android:theme="@style/Base.Theme.AppLight" />
+            android:exported="true" />
         <activity
             android:name=".ui.activities.ChooseChair"
             android:exported="true"
-            android:theme="@style/Base.Theme.AppLight" />
+         />
         <activity
             android:name=".ui.activities.accounts.AccountActivity"
             android:exported="false" />
@@ -41,7 +38,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activities.LoginActivity"
-            android:exported="true"> <!-- Cập nhật ở đây -->
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,8 +50,7 @@
             android:exported="true" />
         <activity
             android:name=".ui.activities.Movie"
-            android:exported="true"
-            android:theme="@style/Base.Theme.AppLight" />
+            android:exported="true" />
     </application>
 
 </manifest>

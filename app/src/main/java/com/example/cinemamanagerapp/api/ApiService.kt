@@ -1,63 +1,69 @@
 package com.example.cinemamanagerapp.api
 
-import com.example.cinemamanagerapp.models.FoodDrink
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
-
-// Định nghĩa lớp Request cho API đăng nhập
-data class LoginRequest(
-    val email: String,
-    val password: String
-)
-// Data class cho phản hồi đăng nhập
-data class LoginResponse(
-    val userId: Int
-)
-
-
-data class RegisterInfo(
-    val username: String,
-    val email: String,
-    val password: String // Thêm trường password
-)
-
-data class UserProfile(
-    var email: String,        // Tham số email
-    var password: String,     // Tham số password
-    var username: String,
-    var address: String? = null,
-    var phone_number: String? = null,
-    var gender: String? = null
-)
-data class PasswordUpdate(
-    val email: String,
-    val oldPassword: String,
-    val newPassword: String
-)
-
+import retrofit2.http.Path
 
 interface ApiService {
     @POST("auth/login")
     fun loginUser(@Body user: LoginRequest): Call<LoginResponse>
 
     @POST("auth/register")
-    fun registerUser(@Body user: RegisterInfo): Call<Void>
+    fun registerUser(@Body user: RegisterRequest): Call<RegisterResponse>
 
-    @POST("auth/get-profile")
-    fun getProfile(@Body params: Map<String, Int>): Call<UserProfile> // key string la userId; value là id
-    // server dựa vào idUser trong database lấy thông tin gửi về
+    @PUT("auth/password/update")
+    fun updatePassword(@Body passwordRequest: PasswordUpdateRequest): Call<Void>
 
-    @PUT("auth/update-profile")
-    fun updateProfile(@Body user: ApiUser): Call<Void> // muốn update thanh phần gì thì
-    // ghi vào trong map rồi up lên server . ví dụ userName và phoneNumber
-    // val val params = mapOf( "userName" to newName, "phoneNumber" to 012345679) rồi gui len server
+    @GET("api/notification/all/{id}")
+    fun getAllNotification(@Path("id") id: Int): Call<List<NotificationResponse>>
 
-    @PUT("auth/update-password")
-    fun updatePassword(@Body passwordRequest: PasswordUpdate): Call<Void>
 
-    @GET("api/food-drinks/")
-    fun getFoodDrinks(): Call<List<FoodDrink>>
+    @GET("api/profile/{id}")
+    fun getProfile(@Path("id") id: Int): Call<UserProfileResponse>
+
+    @PUT("api/profile/update/{id}")
+    fun updateProfile(@Path("id") id: Int,@Body user: UserProfileEditRequest): Call<Void>
+
+    @GET("api/category/get-all")
+    fun getAllCategory(): Call<List<String>>
+
+    @GET("api/ticket-queue/get-all/{usedId}")
+    fun getAllTicketQueue(@Path("usedId") userId: Int): Call<List<ShowTimeResponse>>
+
+
+    @GET("api/showtime/{category}")
+    fun getShowTimeCategory(@Path("category") category: String): Call<List<ShowTimeResponse>>
+
+
+    @GET("api/movie/{id}")
+    fun getMovieById(@Path("id") id: Int): Call<MovieInfoResponse>
+
+    @GET("api/choose-seat/{showtime-id}") // thêm api này (2/11)
+    fun getSeatByShowTimeId(@Path("showtime-id") showtimeId: Int): Call<List<Int>> // danh sach so ghe duoc chon
+
+    @GET("api/showtime/now/{category}")
+    fun getNowShowTime(@Path("category") category: String): Call<List<ShowTimeResponse>> // các phim chuẩn bị chiếu trong ngày. select database -> filter
+
+    @GET("api/food-drink/all")
+    fun getAllFoodDrink(): Call<List<FoodDrinksResponse>>
+
+    @POST("api/payment/payment/{showtime-id}")
+    fun PaymentSum(@Path("showtime-id") showtimeId: Int,@Body data : PaymentSumRequest): Call<PaymentSumResponse>
+
+    @GET("api/review/{movie-id}")
+    fun getAllReviewMovie(@Path("movie-id") movieId: Int): Call<List<ReviewResponse>>
+
+    @PUT("api/review/submit/{showtimeId}")
+    fun getSubmitReview(@Path("showtimeId") showtimeId: Int,@Body review: ReviewRequest ): Call<Void> // 204 // suscess but no ResponseData
+
+    @DELETE("api/review/delete/{reviewId}")
+    fun deleteReView(@Path("reviewId") reviewId: Int): Call<Void>
+
+    @GET("api/history/{userId}")
+    fun getAllHistory(@Path("userId") userId: Int): Call<BookingHistoryResponse>
+
 }

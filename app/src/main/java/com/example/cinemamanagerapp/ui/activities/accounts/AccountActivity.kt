@@ -23,9 +23,6 @@ class AccountActivity : AppCompatActivity() {
     private lateinit var tedName: EditText
     private lateinit var tedPhone: EditText
     private lateinit var rdoGroupGender: RadioGroup
-
-    private val apiService: ApiService by lazy { RetrofitClient.apiService }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)

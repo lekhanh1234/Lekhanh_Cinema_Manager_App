@@ -51,66 +51,37 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_containerPayment"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lv_FoodList">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="match_parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
                     <CheckBox
-                        android:id="@+id/cb_momo"
+                        android:id="@+id/cb_zalopay"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
                         />
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/icon_momo"
+                        android:src="@drawable/icon_zalopay"
                         android:scaleType="centerCrop"
                         android:padding="5dp"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Momo"
+                        android:text="Zalopay"
                         android:layout_marginStart="30dp"
                         android:textColor="@color/white"
                         android:textSize="25dp"
                         android:gravity="center"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="60dp">
-                    <CheckBox
-                        android:id="@+id/cb_shopeepay"
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent"
-                        />
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/icon_shopeepay"
-                        android:scaleType="centerCrop"
-                        android:padding="5dp"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="ShopeePay"
-                        android:layout_marginStart="30dp"
-                        android:textColor="@color/white"
-                        android:textSize="25dp"
-                        android:gravity="center"/>
-                </LinearLayout>
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView

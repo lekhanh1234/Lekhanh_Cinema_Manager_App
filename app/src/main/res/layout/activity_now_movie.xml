@@ -6,8 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".ui.activities.NowMovie">
-    <!-- Thanh điều hướng ở top -->
+    tools:context=".ui.activities.NowShowTime">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
     <LinearLayout
         android:id="@+id/LL_NowMovie"
         android:layout_width="match_parent"
@@ -20,14 +30,16 @@
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent">
         <Button
+            android:id="@+id/btn_currentMovie"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
             android:text="Phim đang chiếu"
             android:textColor="@color/white"
             android:gravity="center"
-            android:background="@color/green_chaleston" />
+            android:background="@color/blue_bld" />
         <Button
+            android:id="@+id/btn_upcoming_movie"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
@@ -36,29 +48,61 @@
             android:gravity="center"
             android:background="@color/green_chaleston" />
     </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvMovieCategoryList"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/green_chaleston"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LL_NowMovie" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvMovieByCategory"
+            <HorizontalScrollView
+                android:id="@+id/hcv_category_list"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/green_chaleston"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvFind"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/LL_category_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        style="@style/CategoryButton"
+                        android:text="Button 1" />
+
+                    <Button
+                        style="@style/CategoryButton"
+                        android:text="Button 2" />
+
+                    <Button
+                        style="@style/CategoryButton"
+                        android:text="Button 3" />
+
+                    <Button
+                        style="@style/CategoryButton"
+                        android:text="Button 4" />
+                    <Button
+                        style="@style/CategoryButton"
+                        android:text="Button 5" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvShowTimeByCategory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hcv_category_list"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" /></LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 
